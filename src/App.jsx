@@ -1,32 +1,35 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+import { Typography } from '@mui/material'
+import { Container } from '@mui/system'
+import CardsToDo from './components/CardsToDo'
+import Input from './components/Input'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [arrayTodos, setTodos] = useState([])
+  const [isEmpty, setErrorInput] = useState(false)
+  const [hp, setHT] = useState('')
+  const handleClick = (e) => {
+    e.preventDefault();
+    const inputText = document.querySelector('#inputText')
+    if(isEmpty) setErrorInput(false), setHT('')
+    if(!inputText.value) {
+      setHT('No puede estar vacío')
+      setErrorInput(true)
+      return
+    }
+    setTodos([...arrayTodos, inputText.value])
+    inputText.value = null
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Container>
+        <Typography sx={{fontWeight: 600, color: '#252525'}} my={5} align='center' variant='h2'>Coolest To Do</Typography>
+        <Input error={isEmpty} handleClick={handleClick} hp={hp}/>
+        <hr />
+        <CardsToDo todos={arrayTodos} />
+      </Container>
     </div>
   )
 }
